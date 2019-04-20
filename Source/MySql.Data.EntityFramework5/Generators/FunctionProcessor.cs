@@ -1,4 +1,4 @@
-﻿// Copyright © 2008, 2013,  Oracle and/or its affiliates. All rights reserved.
+// Copyright © 2008, 2013,  Oracle and/or its affiliates. All rights reserved.
 //
 // MySQL Connector/NET is licensed under the terms of the GPLv2
 // <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most 
@@ -64,6 +64,20 @@ namespace MySql.Data.Entity
       dateFunctions.Add("Hour", "HOUR({0})");
       dateFunctions.Add("Minute", "MINUTE({0})");
       dateFunctions.Add("Second", "SECOND({0})");
+      dateFunctions.Add("DiffDays", "TIMESTAMPDIFF(DAY, {1}, {0})");
+      dateFunctions.Add("DiffHours", "TIMESTAMPDIFF(HOUR, {1}, {0})");
+      dateFunctions.Add("DiffMicroseconds", "TIMESTAMPDIFF(MICROSECOND, {1}, {0})");
+      dateFunctions.Add("DiffMinutes", "TIMESTAMPDIFF(MINUTE, {1}, {0})");
+      dateFunctions.Add("DiffMonths", "TIMESTAMPDIFF(MONTH, {1}, {0})");
+      dateFunctions.Add("DiffSeconds", "TIMESTAMPDIFF(SECOND, {1}, {0})");
+      dateFunctions.Add("DiffYears", "TIMESTAMPDIFF(YEAR, {1}, {0})");
+      dateFunctions.Add("AddDays", "TIMESTAMPADD(DAY, {1}, {0})");
+      dateFunctions.Add("AddHours", "TIMESTAMPADD(HOUR, {1}, {0})");
+      dateFunctions.Add("AddMicroseconds", "TIMESTAMPADD(MICROSECOND, {1}, {0})");
+      dateFunctions.Add("AddMinutes", "TIMESTAMPADD(MINUTE, {1}, {0})");
+      dateFunctions.Add("AddMonths", "TIMESTAMPADD(MONTH, {1}, {0})");
+      dateFunctions.Add("AddSeconds", "TIMESTAMPADD(SECOND, {1}, {0})");
+      dateFunctions.Add("AddYears", "TIMESTAMPADD(YEAR, {1}, {0})");
 
       stringFunctions.Add("Concat", "CONCAT({0}, {1})");
       stringFunctions.Add("IndexOf", "LOCATE({0}, {1})");
