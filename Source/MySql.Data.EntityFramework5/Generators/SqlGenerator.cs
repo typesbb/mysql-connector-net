@@ -1,4 +1,4 @@
-﻿// Copyright © 2008, 2015, Oracle and/or its affiliates. All rights reserved.
+// Copyright © 2008, 2015, Oracle and/or its affiliates. All rights reserved.
 //
 // MySQL Connector/NET is licensed under the terms of the GPLv2
 // <http://www.gnu.org/licenses/old-licenses/gpl-2.0.html>, like most 
@@ -130,8 +130,27 @@ namespace MySql.Data.Entity
       SelectStatement select = input as SelectStatement;
       UnionFragment union = input as UnionFragment;
 
-      if (select != null)      
+      if (select != null)
+      {
         select.HasDifferentNameForColumn(column);
+        if (column.PropertyFragment.Properties.Count >= 3)
+        {
+          var t = column.PropertyFragment.Properties[column.PropertyFragment.Properties.Count - 2];
+          var p = column.PropertyFragment.LastProperty;
+          foreach (var c in select.Columns)
+          {
+            if (c.TableName == t && c.ColumnName == p)
+            {
+              if (!string.IsNullOrEmpty(c.ColumnAlias))
+              {
+                column.ColumnAlias = column.ColumnName;
+                column.ColumnName = c.ColumnAlias;
+              }
+              break;
+            }
+          }
+        }
+      }
       else if (union != null)
         union.HasDifferentNameForColumn(column);
 
@@ -361,6 +380,11 @@ namespace MySql.Data.Entity
         else
         {
           col = new ColumnFragment(null, null);
+          var literal = fragment as LiteralFragment;
+          if (literal != null && literal.Literal == "1")
+          {
+            literal.Literal = "0+1";
+          }
           col.Literal = fragment;
         }
 
