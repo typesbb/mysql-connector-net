@@ -263,6 +263,7 @@ namespace MySql.Data.Entity
       _dispatcher.Add("AddPrimaryKeyOperation", (OpDispatcher)((op) => { return Generate(op as AddPrimaryKeyOperation); }));
       _dispatcher.Add("AlterColumnOperation", (OpDispatcher)((op) => { return Generate(op as AlterColumnOperation); }));
       _dispatcher.Add("CreateIndexOperation", (OpDispatcher)((op) => { return Generate(op as CreateIndexOperation); }));
+      _dispatcher.Add("RenameIndexOperation", (OpDispatcher)((op) => { return Generate(op as RenameIndexOperation); }));
       _dispatcher.Add("CreateTableOperation", (OpDispatcher)((op) => { return Generate(op as CreateTableOperation); }));
       _dispatcher.Add("DropColumnOperation", (OpDispatcher)((op) => { return Generate(op as DropColumnOperation); }));
       _dispatcher.Add("DropForeignKeyOperation", (OpDispatcher)((op) => { return Generate(op as DropForeignKeyOperation); }));
@@ -302,12 +303,17 @@ namespace MySql.Data.Entity
         if (!_dispatcher.ContainsKey(op.GetType().Name))
           throw new NotImplementedException(op.GetType().Name);
         OpDispatcher opdis = _dispatcher[op.GetType().Name];
-        stmts.Add(opdis(op)); 
+        var item = opdis(op);
+        if (item != null)
+          stmts.Add(item);
       }
       if (_specialStmts.Count > 0)
       {
         foreach (var item in _specialStmts)
-          stmts.Add(item);
+        {
+          if (item != null)
+            stmts.Add(item);
+        }
       }
       return stmts;
     }
@@ -738,6 +744,16 @@ namespace MySql.Data.Entity
                       "BTREE" : "HASH";
 
       sb.Append("using " + indexType);
+
+      return new MigrationStatement() { Sql = sb.ToString() };
+    }
+    protected virtual MigrationStatement Generate(RenameIndexOperation op)
+    {
+      StringBuilder sb = new StringBuilder();
+
+      sb = sb.Append("ALTER TABLE ");
+
+      sb.AppendFormat("`{0}` RENAME INDEX `{1}` TO {2}", TrimSchemaPrefix(op.Table), op.Name, op.NewName);
 
       return new MigrationStatement() { Sql = sb.ToString() };
     }
