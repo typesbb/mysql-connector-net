@@ -739,7 +739,7 @@ namespace MySql.Data.Entity
               {
                 // Case LIKE '%pattern%'
                 DbConstantExpression c = (DbConstantExpression)fl.Arguments[0];
-                like.Pattern = new LiteralFragment(string.Format("%{0}%", c.Value.ToString()));                
+                like.Pattern = new LiteralFragment(string.Format("'%{0}%'", c.Value.ToString()));                
                 return like;
               } 
               else if ((par = fl.Arguments[0] as DbParameterReferenceExpression) != null) 
