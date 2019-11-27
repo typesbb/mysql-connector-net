@@ -211,6 +211,8 @@ namespace MySql.Data.Entity
           generator.Ops.Push(OpType.Union);
         }
         columns = GetDefaultColumnsForFragment(input.Left);
+        if (input.Name != null)
+          foreach (ColumnFragment cf in columns) { cf.PushInput(input.Name); }
         if (input is JoinFragment && input.Right != null)
         {
           List<ColumnFragment> right = GetDefaultColumnsForFragment(input.Right);
